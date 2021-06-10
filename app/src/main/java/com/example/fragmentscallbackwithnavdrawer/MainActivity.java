@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.fragmentscallbackwithnavdrawer.utils.Gol;
 import com.google.android.material.navigation.NavigationView;
@@ -20,15 +22,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     //la gestion des fragms :
     FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction ;
+    FragmentTransaction fragmentTransaction;
     // creat de la navigview :
-    private NavigationView navigationView ;
-    private static final  String emplacement = MainActivity.class.getSimpleName();
+    private NavigationView navigationView;
+    Button btn_addFragment;
+
+
+
+
+    private static final String emplacement = MainActivity.class.getSimpleName();
 
     public void initUi() {
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView =findViewById(R.id.nav_navigationView);
+        navigationView = findViewById(R.id.nav_navigationView);
+        btn_addFragment = findViewById(R.id.btn_addFragment);
 
     }
 
@@ -37,10 +45,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Gol.addLog(emplacement, "onCreate");
+// ajout d un  listener s/ btn_addFragment pr affich  le frgm qd clic :
+
+
         // ajout de la meth de init du UI :
         initUi();
+
+        btn_addFragment.setOnClickListener(new View.OnClickListener() {
+                                               @Override
+                                               public void onClick(View v) {
+                                                   addFragment();
+                                               }
+                                           }
+        );
         // ajout du 1er frgm :
-        addFragment();
+//        addFragment();
 
         // ajout du support pour la gestion de la toolbar :
         setSupportActionBar(toolbar);
@@ -58,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //
         navigationView.setNavigationItemSelectedListener(this);
 
-        if(savedInstanceState == null){
-            addFragment();
+        if (savedInstanceState == null) {
+//            addFragment();
             // Force  l affichage du 1er frgm  au demarrage
             navigationView.setCheckedItem(R.id.nav_fragment_1);
         }
@@ -72,14 +92,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
-        else {
-        super.onBackPressed();}
     }
 
-    private void addFragment(){
+    private void addFragment() {
         fragmentManager = getSupportFragmentManager();
         //commencer la discussion :
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -87,18 +107,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment_01 fragment_01 = new Fragment_01();
         // ajout au container de fragm :
         fragmentTransaction.add(R.id.fragment_container, fragment_01);
+        fragmentTransaction.addToBackStack("addToBackStack1");
         //finalis de la creat du frgm :
         fragmentTransaction.commit();
+
 
 
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull @org.jetbrains.annotations.NotNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.nav_fragment_1:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_01()).
-                commit();
+                        commit();
                 break;
             case R.id.nav_fragment_2:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Fragment_02()).
@@ -121,21 +143,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    protected void onStart(){
+
+    protected void onStart() {
         super.onStart();
-        Gol.addLog(emplacement,"onPause");
+        Gol.addLog(emplacement, "onPause");
     }
 
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        Gol.addLog(emplacement,"onResume");
+        Gol.addLog(emplacement, "onResume");
     }
 
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
     }
 
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
     }
 
