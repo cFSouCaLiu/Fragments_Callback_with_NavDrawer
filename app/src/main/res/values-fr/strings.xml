@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fragments &amp; Callback with NavDrawer</string>
+    <string name="navigation_drawer_open">Ouvrir navigation drawer</string>
+    <string name="navigation_drawer_close">Fermer navigation drawer</string>
+</resources>
